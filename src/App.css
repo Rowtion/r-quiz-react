@@ -272,41 +272,45 @@ button:disabled {
   margin-top: 1.5rem;
 }
 
-.option {
-  position: relative;
-  padding: 1rem 1rem 1rem 3rem;
+.options > div {
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
 }
 
-.option-label {
-  position: absolute;
-  left: 1rem;
-  font-weight: 600;
-  color: var(--primary-color);
+.options > div:hover {
+  background-color: #f5f5f5;
+  transform: translateX(5px);
 }
 
-.option:hover {
-  background: var(--hover-color);
+.options > div.selected {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+  color: #1976d2;
 }
 
-.option.selected {
-  background: var(--primary-color);
-  color: white;
+.options > div.correct {
+  background-color: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
 }
 
-.correct-answer {
-  background-color: rgba(46, 204, 113, 0.1) !important;
-  border: 2px solid var(--success-color) !important;
+.options > div.wrong {
+  background-color: #ffebee;
+  border-color: #ef5350;
+  color: #c62828;
 }
 
-.correct-answer .option-label {
-  color: var(--success-color);
-}
-
-.correct-indicator {
-  position: absolute;
-  right: 1rem;
-  color: var(--success-color);
-  font-weight: bold;
+.options > div.correct-answer {
+  background-color: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
 }
 
 .quiz-controls {
@@ -617,4 +621,200 @@ button:disabled {
   background-color: var(--primary-color);
   color: white;
   text-decoration: none;
+}
+
+/* 基础响应式设置 */
+@media (max-width: 768px) {
+  .app {
+    margin: 0;
+    padding: 1rem;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .quiz-selection {
+    padding: 1rem 0;
+  }
+
+  .quiz-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .quiz-buttons button {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .question {
+    padding: 1rem 0;
+  }
+
+  .options > div {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .quiz-controls {
+    padding: 1rem 0;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .quiz-controls button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    flex: 1;
+  }
+
+  .quiz-result {
+    padding: 1rem;
+  }
+
+  .score-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .score {
+    font-size: 2rem;
+  }
+
+  .score-breakdown {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .questions-overview {
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+
+  .question-dot {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.8rem;
+  }
+
+  .questions-review {
+    padding: 1rem 0;
+  }
+
+  .question-review {
+    padding: 1rem;
+    margin: 0.75rem 0;
+  }
+
+  .code-block {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+    font-size: 0.8rem;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .nickname-container {
+    padding: 1rem;
+  }
+
+  .nickname-container input {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .nickname-container button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .return-button-container {
+    padding: 1rem 0;
+  }
+
+  .checkin-hint {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+}
+
+/* 更小屏幕的适配 */
+@media (max-width: 480px) {
+  .app {
+    padding: 0.75rem;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .quiz-buttons button {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .options > div {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .score {
+    font-size: 1.75rem;
+  }
+
+  .question-dot {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* 确保内容不会被底部按钮遮挡 */
+.quiz {
+  padding-bottom: 80px;
+}
+
+/* 优化长文本的换行 */
+.options > div {
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* 优化代码块在移动端的显示 */
+.code-block {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 添加滚动条样式 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
