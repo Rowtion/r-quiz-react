@@ -353,5 +353,83 @@ gseaNb(
                 explanation: "在代码中，gseaNb函数使用了pvalX = 0.65和pvalY = 0.7来调整p值的显示位置，这样可以更好地展示统计信息。"
             }
         ]
+    },
+    'gene_correlation': {
+        title: "D8-基因相关性分析作业",
+        description: "本测验主要考察基因相关性分析的方法和可视化技巧。",
+        questions: [
+            {
+                category: '基因相关性分析',
+                difficulty: 'medium',
+                question: '在进行基因相关性分析时，以下哪种可视化方法最适合展示大量基因之间的相互关系并同时显示相关性强度？',
+                code: `# 相关性分析代码示例
+# 计算相关性矩阵
+cor_matrix <- cor(t(gene_expr))
+
+# 方法1：和弦图
+chordDiagram(cor_matrix,
+    grid.col = rainbow(nrow(cor_matrix)),
+    symmetric = TRUE)
+
+# 方法2：热图
+pheatmap(cor_matrix,
+    color = colorRampPalette(c("blue", "white", "red"))(100))
+
+# 方法3：散点图矩阵
+pairs(t(gene_expr))`,
+                options: [
+                    '散点图矩阵 - 因为它可以直观显示每对基因的具体关系',
+                    '和弦图 - 因为它能够优雅地展示基因间的连接关系',
+                    '热图 - 因为它既能展示层次聚类结构又能显示相关性强度',
+                    '线图 - 因为它能显示基因表达量的变化趋势'
+                ],
+                correctAnswer: 2,
+                explanation: '热图是展示大规模基因相关性最理想的方式，因为它不仅能通过颜色深浅直观地展示相关性强度，还能通过层次聚类展示基因间的关系模式。和弦图虽然美观，但在基因数量较多时可能会显得混乱；散点图矩阵在基因数量大时会占用过多空间；而线图则不适合展示相关性关系。'
+            },
+            {
+                category: '数据预处理',
+                difficulty: 'medium',
+                question: '在计算基因相关性之前，为什么需要对表达数据进行标准化？',
+                code: `# 数据标准化示例
+# 方法1：Z-score标准化
+scaled_expr <- t(scale(t(gene_expr)))
+
+# 方法2：Min-Max标准化
+min_max_scale <- function(x) {
+    (x - min(x)) / (max(x) - min(x))
+}
+normalized_expr <- t(apply(gene_expr, 1, min_max_scale))`,
+                options: [
+                    '标准化会改变基因间的相关性',
+                    '使不同基因的表达值在相同尺度上便于比较',
+                    '标准化是可选的，不会影响结果',
+                    '只需要对部分基因进行标准化'
+                ],
+                correctAnswer: 1,
+                explanation: '标准化是必要的预处理步骤，因为不同基因的表达水平可能差异很大。通过标准化（如Z-score标准化），可以消除量级差异的影响，使基因表达值具有可比性。这样计算出的相关性才能真实反映基因表达模式的相似度。'
+            },
+            {
+                category: '相关性分析',
+                difficulty: 'hard',
+                question: '在R中计算基因相关性时，以下哪个方法最适合处理基因表达数据？',
+                code: `# 不同相关性计算方法
+# Pearson相关系数
+pearson_cor <- cor(t(gene_expr), method = "pearson")
+
+# Spearman相关系数
+spearman_cor <- cor(t(gene_expr), method = "spearman")
+
+# Kendall相关系数
+kendall_cor <- cor(t(gene_expr), method = "kendall")`,
+                options: [
+                    'Pearson相关系数 - 因为它最常用',
+                    'Spearman相关系数 - 因为它对异常值不敏感',
+                    'Kendall相关系数 - 因为它计算最准确',
+                    '三种方法都需要尝试比较'
+                ],
+                correctAnswer: 1,
+                explanation: 'Spearman相关系数是处理基因表达数据的优选方法，因为：1)它不要求数据呈正态分布；2)对异常值不敏感；3)能够捕捉非线性关系。基因表达数据通常包含噪声和异常值，使用Spearman相关系数可以得到更稳健的结果。'
+            }
+        ]
     }
 }
