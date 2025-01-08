@@ -355,7 +355,7 @@ gseaNb(
         ]
     },
     'gene_correlation': {
-        title: "D8-基因相关性分析作业",
+        title: "D8作业-基因相关性分析",
         description: "本测验主要考察基因相关性分析的方法和可视化技巧。",
         questions: [
             {
@@ -414,13 +414,16 @@ normalized_expr <- t(apply(gene_expr, 1, min_max_scale))`,
                 question: '在R中计算基因相关性时，以下哪个方法最适合处理基因表达数据？',
                 code: `# 不同相关性计算方法
 # Pearson相关系数
-pearson_cor <- cor(t(gene_expr), method = "pearson")
+pearson_cor <- cor(gene1_expr, gene2_expr, 
+                  method = "pearson")
 
 # Spearman相关系数
-spearman_cor <- cor(t(gene_expr), method = "spearman")
+spearman_cor <- cor(gene1_expr, gene2_expr, 
+                   method = "spearman")
 
 # Kendall相关系数
-kendall_cor <- cor(t(gene_expr), method = "kendall")`,
+kendall_cor <- cor(gene1_expr, gene2_expr, 
+                   method = "kendall")`,
                 options: [
                     'Pearson相关系数 - 因为它最常用',
                     'Spearman相关系数 - 因为它对异常值不敏感',
@@ -429,6 +432,179 @@ kendall_cor <- cor(t(gene_expr), method = "kendall")`,
                 ],
                 correctAnswer: 1,
                 explanation: 'Spearman相关系数是处理基因表达数据的优选方法，因为：1)它不要求数据呈正态分布；2)对异常值不敏感；3)能够捕捉非线性关系。基因表达数据通常包含噪声和异常值，使用Spearman相关系数可以得到更稳健的结果。'
+            },
+            {
+                category: '相关性分析',
+                difficulty: 'medium',
+                question: '在进行基因共表达网络分析时，为什么要计算基因表达的相关系数矩阵？',
+                code: `# 计算相关系数矩阵
+cor_matrix <- cor(t(expr_matrix), 
+                 method = "spearman",
+                 use = "pairwise.complete.obs")
+
+# 设置相关性阈值
+threshold <- 0.7
+cor_matrix[abs(cor_matrix) < threshold] <- 0`,
+                options: [
+                    '相关系数矩阵可以反映基因间的表达模式相似性',
+                    '只是为了数据可视化',
+                    '相关系数计算是可选的步骤',
+                    '相关系数只用于检测异常值'
+                ],
+                correctAnswer: 0,
+                explanation: '相关系数矩阵是构建基因共表达网络的基础，它反映了基因间表达模式的相似性。高相关性表明基因可能参与相似的生物学过程或受相同的调控机制控制。通过设置相关性阈值，可以筛选出显著的基因对关系。'
+            },
+            {
+                category: '相关性分析',
+                difficulty: 'hard',
+                question: '在分析基因表达数据的相关性时，Pearson相关系数和Spearman相关系数的选择依据是什么？',
+                code: `# 比较Pearson和Spearman相关系数
+pearson_cor <- cor(gene1_expr, gene2_expr, 
+                  method = "pearson")
+spearman_cor <- cor(gene1_expr, gene2_expr, 
+                   method = "spearman")
+
+# 可视化两个基因的表达关系
+plot(gene1_expr, gene2_expr)
+abline(lm(gene2_expr ~ gene1_expr))`,
+                options: [
+                    'Pearson更好，因为计算速度快',
+                    'Spearman更好，因为考虑了秩次关系',
+                    '根据数据分布特征选择：正态分布用Pearson，非正态或有异常值用Spearman',
+                    '两种方法没有区别，随便选择'
+                ],
+                correctAnswer: 2,
+                explanation: '选择相关系数类型需要考虑数据特征：1) Pearson相关系数适用于呈正态分布且具有线性关系的数据；2) Spearman相关系数基于秩次，对异常值不敏感，适用于非正态分布或存在异常值的数据。在基因表达数据分析中，如果数据经过良好的预处理且呈正态分布，可以使用Pearson；如果数据分布不确定或存在异常值，建议使用Spearman。'
+            }
+        ]
+    },
+    'D9': {
+        title: "D9作业-免疫浸润分析",
+        description: "本测验主要考察免疫浸润分析相关知识点。",
+        questions: [
+            {
+                category: '免疫浸润分析',
+                difficulty: 'medium',
+                question: '在使用CIBERSORT进行免疫浸润分析时，为什么需要对基因表达数据进行标准化处理？',
+                code: `# 数据标准化示例
+# 1. TPM标准化
+tpm_matrix <- counts2tpm(counts_matrix, gene_length)
+
+# 2. log2转换
+log2_tpm <- log2(tpm_matrix + 1)
+
+# 3. 进行CIBERSORT分析
+results <- CIBERSORT(sig_matrix, mixture_data)`,
+                options: [
+                    '标准化不是必需的，直接用原始数据即可',
+                    '为了消除测序深度和基因长度的影响，使不同样本可比',
+                    '标准化只是为了数据可视化',
+                    '标准化会降低分析的准确性'
+                ],
+                correctAnswer: 1,
+                explanation: '在进行CIBERSORT分析之前，需要对数据进行适当的标准化处理：1)将counts数据转换为TPM可以消除测序深度和基因长度的影响；2)log2转换可以使数据分布更接近正态分布；3)标准化后的数据更适合进行跨样本比较，提高免疫浸润估计的准确性。'
+            },
+            {
+                category: '免疫浸润分析',
+                difficulty: 'hard',
+                question: '在解释CIBERSORT结果时，以下哪个说法是正确的？',
+                code: `# CIBERSORT结果分析
+cibersort_results <- read.table("cibersort_results.txt")
+
+# 检查P值
+significant_samples <- cibersort_results$P.value < 0.05
+
+# 计算免疫细胞比例
+cell_proportions <- cibersort_results[, 1:22]
+boxplot(cell_proportions, las = 2)`,
+                options: [
+                    'P值大于0.05的样本结果更可靠',
+                    'P值小于0.05表示免疫细胞组成估计结果可靠',
+                    '不需要考虑P值，所有结果都同样可靠',
+                    'P值只与样本数量有关'
+                ],
+                correctAnswer: 1,
+                explanation: 'CIBERSORT的P值反映了免疫细胞组成估计的可靠性：1)P值<0.05表示估计结果统计学显著，更可靠；2)应该优先考虑P值显著的样本进行后续分析；3)P值的计算基于置换检验，反映了估计结果的置信度。'
+            },
+            {
+                category: '免疫浸润分析',
+                difficulty: 'medium',
+                question: '在比较不同组织或疾病状态下的免疫浸润差异时，应该使用什么统计方法？',
+                code: `# 免疫浸润差异分析
+# 方法1：t检验
+t_test_results <- apply(cell_proportions, 2, function(x) {
+    t.test(x ~ group)$p.value
+})
+
+# 方法2：Wilcoxon秩和检验
+wilcox_results <- apply(cell_proportions, 2, function(x) {
+    wilcox.test(x ~ group)$p.value
+})
+
+# 多重检验校正
+adjusted_pvals <- p.adjust(wilcox_results, method = "BH")`,
+                options: [
+                    '只用t检验就够了',
+                    '只需要看细胞比例的平均值',
+                    '应该结合非参数检验和多重检验校正',
+                    '不需要统计检验'
+                ],
+                correctAnswer: 2,
+                explanation: '比较免疫浸润差异时的统计考虑：1)由于免疫细胞比例数据通常不符合正态分布，建议使用非参数检验如Wilcoxon秩和检验；2)因为同时比较多个免疫细胞类型，需要进行多重检验校正以控制假阳性率；3)可以结合箱线图等可视化方法展示差异。'
+            },
+            {
+                category: '免疫浸润分析',
+                difficulty: 'hard',
+                question: '如何评估和解释不同免疫细胞类型之间的相关性？',
+                code: `# 免疫细胞相关性分析
+# 计算相关性矩阵
+cor_matrix <- cor(cell_proportions, 
+                 method = "spearman")
+
+# 可视化相关性
+library(corrplot)
+corrplot(cor_matrix, 
+         method = "color",
+         type = "upper",
+         order = "hclust",
+         tl.col = "black",
+         tl.srt = 45)`,
+                options: [
+                    '正相关意味着细胞类型完全相同',
+                    '负相关表示细胞类型之间没有关系',
+                    '相关性反映了细胞类型在微环境中的共存或拮抗关系',
+                    '不同免疫细胞之间不存在相关性'
+                ],
+                correctAnswer: 2,
+                explanation: '免疫细胞相关性分析的解释：1)正相关可能反映细胞类型在功能上的协同作用或共同调控机制；2)负相关可能表示细胞类型之间的拮抗关系或相互抑制；3)相关性分析有助于理解肿瘤微环境中免疫细胞的相互作用网络；4)应结合生物学知识解释相关性结果。'
+            },
+            {
+                category: '免疫浸润分析',
+                difficulty: 'hard',
+                question: '在进行免疫浸润分析时，如何评估结果的生物学意义？',
+                code: `# 免疫浸润结果与临床相关性分析
+# 生存分析
+library(survival)
+library(survminer)
+
+# 根据免疫细胞比例分组
+median_value <- median(cell_proportions$CD8T)
+groups <- ifelse(cell_proportions$CD8T > median_value, 
+                "High", "Low")
+
+# KM曲线
+fit <- survfit(Surv(time, status) ~ groups)
+ggsurvplot(fit, 
+           pval = TRUE,
+           risk.table = TRUE)`,
+                options: [
+                    '只需要看免疫细胞比例的高低',
+                    '直接用P值判断重要性',
+                    '需要结合临床特征、生存预后等多个方面综合分析',
+                    '不同样本之间不能比较'
+                ],
+                correctAnswer: 2,
+                explanation: '评估免疫浸润结果的生物学意义需要多个层面：1)结合临床特征分析免疫细胞组成与疾病进展的关系；2)通过生存分析评估免疫细胞比例与预后的关联；3)整合其他分子特征数据，如基因突变、表达谱等；4)参考已有文献和数据库中的相关研究结果；5)考虑样本类型和疾病背景的特异性。'
             }
         ]
     }
