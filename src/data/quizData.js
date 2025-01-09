@@ -609,7 +609,7 @@ ggsurvplot(fit,
         ]
     },
     'D10': {
-        title: "R代码讲席营D10课程测验",
+        title: "D10作业-诊断模型构建",
         description: "本测验涵盖阿尔茨海默病(AD)诊断模型构建与评估的相关内容。",
         questions: [
             {
