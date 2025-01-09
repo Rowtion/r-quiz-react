@@ -607,5 +607,88 @@ ggsurvplot(fit,
                 explanation: '评估免疫浸润结果的生物学意义需要多个层面：1)结合临床特征分析免疫细胞组成与疾病进展的关系；2)通过生存分析评估免疫细胞比例与预后的关联；3)整合其他分子特征数据，如基因突变、表达谱等；4)参考已有文献和数据库中的相关研究结果；5)考虑样本类型和疾病背景的特异性。'
             }
         ]
+    },
+    'D10': {
+        title: "R代码讲席营D10课程测验",
+        description: "本测验涵盖阿尔茨海默病(AD)诊断模型构建与评估的相关内容。",
+        questions: [
+            {
+                category: '诊断模型构建',
+                difficulty: 'medium',
+                question: '在构建AD诊断模型时，ROC分析中的AUC值代表什么？',
+                code: `# ROC分析示例
+roc_res <- roc(group ~ expression,
+               data = dat_expr,
+               auc = TRUE,    
+               ci = TRUE)     
+
+auc_text <- sprintf("AUC = %.3f (%.3f-%.3f)",
+                   roc_res$auc,
+                   roc_res$ci[1],
+                   roc_res$ci[3])`,
+                options: [
+                    'ROC曲线下的面积，表示模型的整体诊断效能',
+                    '真阳性率和假阳性率的比值',
+                    '模型的准确率',
+                    '敏感性和特异性的平均值'
+                ],
+                correctAnswer: 0,
+                explanation: 'AUC（Area Under Curve）是ROC曲线下的面积，取值范围在0-1之间。AUC越接近1，表示模型的诊断效能越好。AUC=0.5表示模型的诊断效能等同于随机猜测。'
+            },
+            {
+                category: '特征选择',
+                difficulty: 'hard',
+                question: '在使用LASSO进行特征选择时，lambda参数的作用是什么？',
+                code: `# LASSO回归示例
+cv_fit <- cv.glmnet(x = as.matrix(expr_selected),
+                    y = as.factor(group_data),
+                    family = "binomial",
+                    alpha = 1,
+                    nfolds = 5)`,
+                options: [
+                    'lambda值越大，模型越简单，选择的特征越少',
+                    'lambda值越大，模型越复杂，选择的特征越多',
+                    'lambda值不影响特征选择',
+                    'lambda值只影响模型的收敛速度'
+                ],
+                correctAnswer: 0,
+                explanation: 'LASSO回归中的lambda是正则化参数，控制L1惩罚项的强度。lambda值越大，惩罚越强，更多特征的系数会被压缩为0，从而实现特征选择。这有助于避免过拟合并构建更简约的模型。'
+            },
+            {
+                category: '模型评估',
+                difficulty: 'medium',
+                question: '在构建诊断列线图(Nomogram)时，为什么需要进行校正曲线(Calibration Curve)分析？',
+                code: `# 校正曲线分析示例
+cal <- calibrate(log_fit_lrm, method = "boot", B = 100)
+plot(cal, xlab = "Predicted Probability", 
+     ylab = "Observed Probability")`,
+                options: [
+                    '评估模型的区分度',
+                    '评估预测概率与实际观察概率的一致性',
+                    '计算模型的敏感性和特异性',
+                    '确定最佳截断值'
+                ],
+                correctAnswer: 1,
+                explanation: '校正曲线用于评估模型预测的概率与实际观察到的概率之间的一致性。理想情况下，预测概率应该与观察概率相近，即校正曲线应该接近45度对角线。这是评估诊断模型可靠性的重要工具。'
+            },
+            {
+                category: '统计分析',
+                difficulty: 'medium',
+                question: '在进行Logistic回归分析时，OR值(优势比)大于1代表什么？',
+                code: `# Logistic回归分析示例
+fit0 <- glm(group ~ gene_expr, 
+            data = expr_data, 
+            family = binomial)
+OR <- exp(coef(fit0)[2])  # 计算OR值`,
+                options: [
+                    '该变量与疾病风险呈负相关',
+                    '该变量与疾病风险无关',
+                    '该变量与疾病风险呈正相关',
+                    '无法判断相关性'
+                ],
+                correctAnswer: 2,
+                explanation: 'OR值(优势比)大于1表示该变量与疾病风险呈正相关，即该变量每增加一个单位，患病的几率会增加。具体增加的倍数等于OR值。这是评估基因表达与疾病关联性的重要指标。'
+            }
+        ]
     }
 }
