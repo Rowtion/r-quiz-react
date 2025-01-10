@@ -2,7 +2,7 @@
   "name": "r-quiz-react",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://[你的GitHub用户名].github.io/r-quiz-react",
+  "homepage": "https://rowtion.github.io/r-quiz-react",
   "type": "module",
   "scripts": {
     "dev": "vite",
