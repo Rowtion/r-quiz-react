@@ -690,5 +690,109 @@ OR <- exp(coef(fit0)[2])  # 计算OR值`,
                 explanation: 'OR值(优势比)大于1表示该变量与疾病风险呈正相关，即该变量每增加一个单位，患病的几率会增加。具体增加的倍数等于OR值。这是评估基因表达与疾病关联性的重要指标。'
             }
         ]
+    },
+    'D11': {
+        title: "D11作业-预后模型构建",
+        description: "本测验涵盖TCGA乳腺浸润癌（BRCA）预后模型构建与评估的相关内容。",
+        questions: [
+            {
+                category: '生存分析',
+                difficulty: 'medium',
+                question: '在进行Kaplan-Meier生存分析时，log-rank检验的p值代表什么？',
+                code: `# KM生存分析示例
+fit <- survfit(Surv(time, status) ~ group, data = data)
+ggsurvplot(fit, pval = TRUE, risk.table = TRUE)`,
+                options: [
+                    '两组生存曲线差异的统计学显著性',
+                    '生存时间的平均值差异',
+                    '风险比的大小',
+                    '生存概率的置信区间'
+                ],
+                correctAnswer: 0,
+                explanation: 'log-rank检验用于比较两组或多组生存曲线的差异，p值表示这种差异是否具有统计学显著性。p值小于0.05通常认为两组生存曲线存在显著差异。'
+            },
+            {
+                category: 'Cox回归',
+                difficulty: 'hard',
+                question: '在Cox比例风险模型中，风险比(HR)大于1表示什么？',
+                code: `# Cox回归示例
+cox_fit <- coxph(Surv(time, status) ~ age + stage, data = data)
+summary(cox_fit)`,
+                options: [
+                    '该变量是保护因素，降低死亡风险',
+                    '该变量是危险因素，增加死亡风险',
+                    '该变量与生存无关',
+                    '无法判断变量与生存的关系'
+                ],
+                correctAnswer: 1,
+                explanation: '在Cox模型中，HR>1表示该变量是危险因素，每增加一个单位，死亡风险增加(HR-1)*100%。HR<1表示保护因素，HR=1表示该变量与生存无关。'
+            },
+            {
+                category: '时间依赖ROC',
+                difficulty: 'medium',
+                question: '时间依赖ROC分析中，AUC值随时间变化说明什么？',
+                code: `# 时间依赖ROC示例
+time_roc <- timeROC(T = time, delta = status, marker = gene_expr,
+                    times = c(1, 3, 5) * 365.25)`,
+                options: [
+                    '模型的预测能力随时间变化',
+                    '样本的生存时间分布',
+                    '基因表达的时间趋势',
+                    '模型的校准程度'
+                ],
+                correctAnswer: 0,
+                explanation: '时间依赖ROC分析可以评估模型在不同时间点的预测能力。AUC值随时间变化说明模型的预测能力可能随时间增强或减弱，这有助于选择最佳预测时间点。'
+            },
+            {
+                category: '预后模型',
+                difficulty: 'medium',
+                question: '在构建预后模型时，为什么需要进行多因素Cox回归分析？',
+                code: `# 多因素Cox回归示例
+cox_fit <- coxph(Surv(time, status) ~ age + stage + gene_expr, 
+                 data = data)`,
+                options: [
+                    '可以同时评估多个变量的独立预后价值',
+                    '比单因素分析更简单',
+                    '不需要考虑变量间的相互作用',
+                    '可以忽略混杂因素的影响'
+                ],
+                correctAnswer: 0,
+                explanation: '多因素Cox回归可以同时评估多个变量对预后的独立影响，控制混杂因素，并考虑变量间的相互作用。这有助于识别真正的独立预后因素。'
+            },
+            {
+                category: '预后模型',
+                difficulty: 'hard',
+                question: '在构建预后模型时，如何评估模型的校准度？',
+                code: `# 模型校准度评估
+cal <- calibrate(cox_fit, method = "boot", B = 100)
+plot(cal, xlab = "Predicted Probability", 
+     ylab = "Observed Probability")`,
+                options: [
+                    '通过ROC曲线下面积评估',
+                    '通过校准曲线评估预测概率与实际观察概率的一致性',
+                    '通过C-index评估',
+                    '通过log-rank检验评估'
+                ],
+                correctAnswer: 1,
+                explanation: '校准曲线用于评估模型预测的概率与实际观察到的概率之间的一致性。理想情况下，预测概率应该与观察概率相近，即校准曲线应该接近45度对角线。'
+            },
+            {
+                category: '预后模型',
+                difficulty: 'medium',
+                question: '在预后模型中，C-index的含义是什么？',
+                code: `# C-index计算
+library(Hmisc)
+c_index <- rcorr.cens(predict(cox_fit), 
+                     Surv(data$time, data$status))`,
+                options: [
+                    '模型预测的准确率',
+                    '模型区分不同风险患者的能力',
+                    '模型的敏感性和特异性',
+                    '模型的拟合优度'
+                ],
+                correctAnswer: 1,
+                explanation: 'C-index（Concordance index）反映了模型区分不同风险患者的能力。C-index=0.5表示随机预测，1表示完美预测。通常C-index>0.7认为模型具有较好的区分能力。'
+            }
+        ]
     }
 }
