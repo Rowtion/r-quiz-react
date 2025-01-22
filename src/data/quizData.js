@@ -451,6 +451,7 @@ normalized_data <- normalizeBetweenArrays(raw_data)`,
                     '减少数据存储空间',
                     '标准化是可选的'
                 ],
+                correctAnswer: 0,
                 explanation: '标准化可以消除技术变异，使不同样本的数据在相同尺度上，便于后续分析比较。这是差异表达分析的重要预处理步骤。'
             }
         ]
