@@ -114,7 +114,7 @@ DEGs <- topTable(fit2, coef=1, n=Inf) %>%
     filter(abs(logFC) > 1 & adj.P.Val < 0.05)`,options:["只看p值小于0.05","只看fold change大于2","p值小于0.05且|logFC|大于1","随便选择一些基因就行"],correctAnswer:2,explanation:"差异基因筛选通常需要同时考虑统计显著性(p值或校正后的p值)和生物学意义(fold change)。通常的标准是adj.P.Val < 0.05且|logFC| > 1。"},{category:"结果解释",difficulty:"medium",question:"在差异表达分析结果中，logFC=2表示什么？",code:`# 结果解释
 DEGs <- topTable(fit2, coef=1, n=Inf)
 head(DEGs)`,options:["基因表达量增加了2倍","基因表达量减少了2倍","基因表达量增加了4倍","基因表达量减少了4倍"],correctAnswer:2,explanation:"logFC=2表示基因表达量增加了4倍（2^2=4），logFC=-2表示基因表达量减少了4倍（2^-2=0.25）。logFC是基于log2转换的fold change。"},{category:"质量控制",difficulty:"hard",question:"在差异表达分析前，为什么需要进行数据标准化？",code:`# 数据标准化
-normalized_data <- normalizeBetweenArrays(raw_data)`,options:["使不同样本的数据具有可比性","提高数据可视化效果","减少数据存储空间","标准化是可选的"],explanation:"标准化可以消除技术变异，使不同样本的数据在相同尺度上，便于后续分析比较。这是差异表达分析的重要预处理步骤。"}]},D6:{title:"GEO富集分析测试",description:"本测验涵盖GEO数据GO和KEGG富集分析的相关内容。",questions:[{category:"GO富集分析",difficulty:"easy",question:"在进行GO富集分析时，以下哪个R包最常用？",code:`# 示例代码
+normalized_data <- normalizeBetweenArrays(raw_data)`,options:["使不同样本的数据具有可比性","提高数据可视化效果","减少数据存储空间","标准化是可选的"],correctAnswer:0,explanation:"标准化可以消除技术变异，使不同样本的数据在相同尺度上，便于后续分析比较。这是差异表达分析的重要预处理步骤。"}]},D6:{title:"GEO富集分析测试",description:"本测验涵盖GEO数据GO和KEGG富集分析的相关内容。",questions:[{category:"GO富集分析",difficulty:"easy",question:"在进行GO富集分析时，以下哪个R包最常用？",code:`# 示例代码
 library(clusterProfiler)
 ego <- enrichGO(gene = gene_list,
                 OrgDb = org.Hs.eg.db,
